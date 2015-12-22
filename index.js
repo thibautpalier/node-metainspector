@@ -282,16 +282,12 @@ MetaInspector.prototype.fetch = function(){
 		if(!error && response.statusCode === 200){
 			var enc = charset(response.headers, body);
 			enc = enc || jchardet.detect(body).encoding.toLowerCase();
-			if(enc != 'utf-8') {
-				iconv = new Iconv(enc, 'UTF-8//TRANSLIT//IGNORE');
-				var html = iconv.convert(new Buffer(body, 'binary')).toString('utf-8');
-			}
-			else {
-				html = body;
-			}
 
-			_this.document = body;
-			_this.parsedDocument = cheerio.load(body);
+			iconv = new Iconv(enc, 'UTF-8//TRANSLIT//IGNORE');
+			var html = iconv.convert(new Buffer(body, 'binary')).toString('utf-8');
+
+			_this.document = html;
+			_this.parsedDocument = cheerio.load(html);
 			_this.response = response;
 
 			_this.initAllProperties();
